@@ -1,0 +1,30 @@
+<h2>Listing categories: <%= @categories.length %></h2>
+
+<% if @categories.empty? %>
+	<p> Categories have not been added yet </p>
+<% else %>
+<ol>
+   <% @categories.each do |category| %>
+   
+   <li><%= link_to category.name, category_path(category.id) %>
+
+   (<%= Product.where('category_id = ?', category.id).length %>)
+
+   </li>
+   <% end %>
+</ol>
+<% end %>
+
+
+<% if user_signed_in? && current_user.is_admin %>
+
+<%= link_to "Add category (ror best practice)", new_category_path, target: "" %> 
+
+<% end %>
+
+<!-- new_categoy_path return string "/catgories/new" -->
+
+<!-- <%= link_to "Add category (ror)", "/categories/new" %> -->
+<!-- <a href= "/categories/new"> Add category </a> --> 
+
+<!-- link_to "add product", new_product_path %>

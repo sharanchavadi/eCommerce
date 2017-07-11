@@ -1,0 +1,21 @@
+<h2>Edit sub_category:</h2>
+
+<%= form_for @sub_category do |f| %>
+<% if @sub_category.errors.any? %>
+<h3> Errors: </h3>
+<ul>
+  <% @sub_category.errors.full_messages.each do |msg| %>
+  <li> <%= msg %> </li>
+  <% end %>
+  </ul>
+  <% end %>
+
+<%= f.label :name %><br/>
+<%= f.text_field :name%> <br/>
+
+<%= f.label :category_id %><br/>
+<%= f.collection_select :category_id, Category.all, :id, :name, prompt: "Select SubCategory" %> <br/>
+
+<%= f.submit "submit" %> 
+
+<% end %>
