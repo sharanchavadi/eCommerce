@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   get 'dashboard/index'
   get 'dashboard/orders_report'
+  get 'categories/find_sub_categories'
 
   devise_for :users
   resources :categories

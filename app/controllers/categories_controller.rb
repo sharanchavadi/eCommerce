@@ -1,8 +1,8 @@
 class CategoriesController < ApplicationController
 
     #filters
-    before_action :authenticate_user!, except: [:index, :show]
-    before_action :check_is_admin, except: [:index, :show]
+    before_action :authenticate_user!, except: [:index, :show, :find_sub_categories]
+    before_action :check_is_admin, except: [:index, :show, :find_sub_categories]
 
 	def index
 		@categories = Category.all
@@ -48,6 +48,10 @@ class CategoriesController < ApplicationController
         @category = Category.find(params[:id])
         @category.destroy
         redirect_to categories_path, notice: "Successfully deleted #{@category.name}"
+    end
+
+    def find_sub_categories
+        @sub_categories = SubCategory.where('category_id = ?', params[:category_id])
     end
 
 end

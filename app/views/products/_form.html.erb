@@ -1,0 +1,139 @@
+<%= form_for @product do |f| %>
+
+<% if @product.errors.any? %>
+<h3> Errors: </h3>
+<ul>
+  <% @product.errors.full_messages.each do |msg| %>
+  <li> <%= msg %> </li>
+  <% end %>
+</ul>
+  <% end %>
+
+<%= f.label :name %><br/>
+<%= f.text_field :name%> 
+<p id = "nameError"></p> <br/>
+
+<%= f.label :description %><br/>
+<%= f.text_area :description %> 
+<p id = "descriptionError"></p> <br/>
+
+<%= f.label :price %><br/>
+<%= f.text_field :price %>
+<p id = "priceError"></p> <br/>
+
+<%= f.label :stock %><br/>
+<%= f.text_field :stock %>
+<p id = "stockError"></p> <br/>
+
+<%= f.label :category_id %><br/>
+<%= f.collection_select :category_id, Category.all, :id, :name, prompt: "Select Category" %> <br/>
+
+<%= f.label :sub_category_id %><br/>
+<%= f.collection_select :sub_category_id, SubCategory.all, :id, :name, prompt: "Select SubCategory" %> <br/>
+
+<%= f.label :code_eligibility %><br/>
+<%= f.check_box :code_eligibility %> <br/>
+
+<%= f.label :Image_url %><br/>
+<%= f.text_field :image_url %> <br/>
+
+
+<%= f.submit "submit" %> 
+
+<% end %>
+
+
+<script>
+	var nameHandle = document.getElementById('product_name');
+	var descriptionHandle = document.getElementById('product_description');
+	var priceHandle = document.getElementById('product_price');
+	var stockHandle = document.getElementById('product_stock');
+	var codHandle = document.getElementById('product_code_eligibility');
+
+  var subCategoryHandle = document.getElementById('product_category_id');
+  var subCategoryHandle = document.getElementById('product_sub_category_id');
+
+
+	var nameErrorHandle = document.getElementById('nameError');
+	var descriptionErrorHandle = document.getElementById('descriptionError');
+	var priceErrorHandle = document.getElementById('priceError');
+	var stockErrorHandle = document.getElementById('stockError');
+
+	 function validatePrice(price) {
+      var numberOnly = /^\d+$/;
+      return numberOnly.test(price);
+    }
+
+  categoryHandle.onchange = function(){
+    subCategoryHandle.innerHTML = "";
+    var output = "";
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/categories/find_sub_categories?category_id=' + categoryHandle.value);
+    xhr.onreadystatechange = function(){
+       if(xhr.readyState == 4 && xhr.status == 200){
+          var subCategories = JSON.parse(xhr.responseText);
+          subCategories.forEach(function(subCategory)
+          {
+            output += "<option value=" + subCategory.id +">" + subCategory.name + "</option>";
+          });
+          subCategoryHandle.innerHTML = output;
+       }
+    }
+    xhr.send();
+  };
+
+
+	nameHandle.onblur = function(){
+      if(nameHandle.value == ""){
+        nameErrorHandle.innerHTML = "Name cannot be blank";
+      }
+    }
+
+    descriptionHandle.onblur = function(){
+      if(descriptionHandle.value == ""){
+        descriptionErrorHandle.innerHTML = "Description cannot be blank";
+      } else {
+               if (descriptionHandle.value.length >= 10) {
+                  descriptionErrorHandle.innerHTML = "";
+               } else {
+                        descriptionErrorHandle.innerHTML = "Description should be more than 10 characters";
+                       }
+             }
+    }
+    
+    
+    priceHandle.onblur = function() {
+    if (priceHandle.value == "") {
+      priceErrorHandle.innerHTML = "price can't be blank";
+    } else {
+      if (validatePrice(priceHandle.value)) {
+        if (priceHandle.value >2500) {
+           priceErrorHandle.innerHTML = "";
+           
+        } else {
+          priceErrorHandle.innerHTML = "should be greater than 2500";
+        }
+    }else {
+      priceErrorHandle.innerHTML = "should contain only numbers " ;
+    } if(priceHandle.value > 50000){
+    	codHandle.checked = false;
+    }else {
+    	codHandle.checked = true;
+    }
+  }
+}
+
+    stockHandle.onblur = function(){
+      if(stockHandle.value == ""){
+        stockErrorHandle.innerHTML = "Stock cannot be blank";
+      } else {
+               if (stockHandle.value > 0) {
+                  stockErrorHandle.innerHTML = "";
+               } else {
+                        stockErrorHandle.innerHTML = "Stock should be greater than 0";
+                       }
+             }
+    }
+
+
+</script>

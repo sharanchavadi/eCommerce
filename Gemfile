@@ -11,6 +11,7 @@ gem 'chartkick'
 gem 'devise' # for windows users add version '3.3.0'
 gem 'faker'
 gem 'pry'
+gem 'rabl'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
